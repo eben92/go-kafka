@@ -1,0 +1,266 @@
+---
+services:
+    controller-1:
+        image: confluentinc/cp-server:7.6.0
+        hostname: controller-1
+        container_name: controller-1
+
+        environment:
+            KAFKA_NODE_ID: 1
+            CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+            KAFKA_PROCESS_ROLES: controller
+            KAFKA_LISTENERS: CONTROLLER://controller-1:19091
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+            KAFKA_INTER_BROKER_LISTENER_NAME: CONTROLLER
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091,2@controller-2:19092,3@controller-3:19093
+            KAFKA_JMX_PORT: 9999
+            KAFKA_JMX_HOSTNAME: controller-1
+            KAFKA_BROKER_RACK: rack-0
+            KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+            KAFKA_OFFSET_REPLICATION_FACTOR: 3
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+            KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 3
+            KAFKA_OPTS: -javaagent:/tmp/jmx_prometheus_javaagent-0.20.0.jar=8091:/tmp/kafka_config.yml
+            KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - 19091:19091
+        volumes:
+            - $PWD/volumes/jmx_prometheus_javaagent-0.20.0.jar:/tmp/jmx_prometheus_javaagent-0.20.0.jar
+            - $PWD/volumes/kafka_config.yml:/tmp/kafka_config.yml
+
+    controller-2:
+        image: confluentinc/cp-server:7.6.0
+        hostname: controller-2
+        container_name: controller-2
+
+        environment:
+            KAFKA_NODE_ID: 2
+            CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+            KAFKA_PROCESS_ROLES: controller
+            KAFKA_LISTENERS: CONTROLLER://controller-2:19092
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+            KAFKA_INTER_BROKER_LISTENER_NAME: CONTROLLER
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091,2@controller-2:19092,3@controller-3:19093
+            KAFKA_JMX_PORT: 9999
+            KAFKA_JMX_HOSTNAME: controller-2
+            KAFKA_BROKER_RACK: rack-0
+            KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+            KAFKA_OFFSET_REPLICATION_FACTOR: 3
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+            KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 3
+            KAFKA_OPTS: -javaagent:/tmp/jmx_prometheus_javaagent-0.20.0.jar=8091:/tmp/kafka_config.yml
+            KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - 19092:19092
+        volumes:
+            - $PWD/volumes/jmx_prometheus_javaagent-0.20.0.jar:/tmp/jmx_prometheus_javaagent-0.20.0.jar
+            - $PWD/volumes/kafka_config.yml:/tmp/kafka_config.yml
+
+    controller-3:
+        image: confluentinc/cp-server:7.6.0
+        hostname: controller-3
+        container_name: controller-3
+
+        environment:
+            KAFKA_NODE_ID: 3
+            CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+            KAFKA_PROCESS_ROLES: controller
+            KAFKA_LISTENERS: CONTROLLER://controller-3:19093
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+            KAFKA_INTER_BROKER_LISTENER_NAME: CONTROLLER
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091,2@controller-2:19092,3@controller-3:19093
+            KAFKA_JMX_PORT: 9999
+            KAFKA_JMX_HOSTNAME: controller-3
+            KAFKA_BROKER_RACK: rack-0
+            KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+            KAFKA_OFFSET_REPLICATION_FACTOR: 3
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+            KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 3
+            KAFKA_OPTS: -javaagent:/tmp/jmx_prometheus_javaagent-0.20.0.jar=8091:/tmp/kafka_config.yml
+            KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - 19093:19093
+        volumes:
+            - $PWD/volumes/jmx_prometheus_javaagent-0.20.0.jar:/tmp/jmx_prometheus_javaagent-0.20.0.jar
+            - $PWD/volumes/kafka_config.yml:/tmp/kafka_config.yml
+
+    kafka-1:
+        image: confluentinc/cp-server:7.6.0
+        hostname: kafka-1
+        container_name: kafka-1
+
+        healthcheck:
+            test: curl -fail --silent http://kafka-1:8090/kafka/v3/clusters/ --output /dev/null || exit 1
+            interval: 10s
+            retries: 10
+            start_period: 20s
+        depends_on:
+            - controller-1
+            - controller-2
+            - controller-3
+        environment:
+            KAFKA_LISTENERS: PLAINTEXT://kafka-1:19094, EXTERNAL://0.0.0.0:9091
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:19094, EXTERNAL://localhost:9091
+            KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+            KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+            KAFKA_JMX_PORT: 10001
+            KAFKA_JMX_HOSTNAME: localhost
+            KAFKA_BROKER_RACK: rack-0
+            KAFKA_OPTS: -javaagent:/tmp/jmx_prometheus_javaagent-0.20.0.jar=8091:/tmp/kafka_config.yml
+            KAFKA_MIN_INSYNC_REPLICAS: 2
+            KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_CLUSTER_LINK_ENABLE: True
+            KAFKA_CONFLUENT_REPORTERS_TELEMETRY_AUTO_ENABLE: True
+            KAFKA_NODE_ID: 4
+            CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091,2@controller-2:19092,3@controller-3:19093
+            KAFKA_PROCESS_ROLES: broker
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - 9091:9091
+            - 10001:10001
+            - 10101:8091
+            - 10201:8090
+        volumes:
+            - $PWD/volumes/jmx_prometheus_javaagent-0.20.0.jar:/tmp/jmx_prometheus_javaagent-0.20.0.jar
+            - $PWD/volumes/kafka_config.yml:/tmp/kafka_config.yml
+
+    kafka-2:
+        image: confluentinc/cp-server:7.6.0
+        hostname: kafka-2
+        container_name: kafka-2
+
+        healthcheck:
+            test: curl -fail --silent http://kafka-2:8090/kafka/v3/clusters/ --output /dev/null || exit 1
+            interval: 10s
+            retries: 10
+            start_period: 20s
+        depends_on:
+            - controller-1
+            - controller-2
+            - controller-3
+        environment:
+            KAFKA_LISTENERS: PLAINTEXT://kafka-2:19095, EXTERNAL://0.0.0.0:9092
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:19095, EXTERNAL://localhost:9092
+            KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+            KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+            KAFKA_JMX_PORT: 10002
+            KAFKA_JMX_HOSTNAME: localhost
+            KAFKA_BROKER_RACK: rack-0
+            KAFKA_OPTS: -javaagent:/tmp/jmx_prometheus_javaagent-0.20.0.jar=8091:/tmp/kafka_config.yml
+            KAFKA_MIN_INSYNC_REPLICAS: 2
+            KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_CLUSTER_LINK_ENABLE: True
+            KAFKA_CONFLUENT_REPORTERS_TELEMETRY_AUTO_ENABLE: True
+            KAFKA_NODE_ID: 5
+            CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091,2@controller-2:19092,3@controller-3:19093
+            KAFKA_PROCESS_ROLES: broker
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - 9092:9092
+            - 10002:10002
+            - 10102:8091
+            - 10202:8090
+        volumes:
+            - $PWD/volumes/jmx_prometheus_javaagent-0.20.0.jar:/tmp/jmx_prometheus_javaagent-0.20.0.jar
+            - $PWD/volumes/kafka_config.yml:/tmp/kafka_config.yml
+
+    kafka-3:
+        image: confluentinc/cp-server:7.6.0
+        hostname: kafka-3
+        container_name: kafka-3
+
+        healthcheck:
+            test: curl -fail --silent http://kafka-3:8090/kafka/v3/clusters/ --output /dev/null || exit 1
+            interval: 10s
+            retries: 10
+            start_period: 20s
+        depends_on:
+            - controller-1
+            - controller-2
+            - controller-3
+        environment:
+            KAFKA_LISTENERS: PLAINTEXT://kafka-3:19096, EXTERNAL://0.0.0.0:9093
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:19096, EXTERNAL://localhost:9093
+            KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+            KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+            KAFKA_JMX_PORT: 10003
+            KAFKA_JMX_HOSTNAME: localhost
+            KAFKA_BROKER_RACK: rack-0
+            KAFKA_OPTS: -javaagent:/tmp/jmx_prometheus_javaagent-0.20.0.jar=8091:/tmp/kafka_config.yml
+            KAFKA_MIN_INSYNC_REPLICAS: 2
+            KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 3
+            KAFKA_CONFLUENT_CLUSTER_LINK_ENABLE: True
+            KAFKA_CONFLUENT_REPORTERS_TELEMETRY_AUTO_ENABLE: True
+            KAFKA_NODE_ID: 6
+            CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091,2@controller-2:19092,3@controller-3:19093
+            KAFKA_PROCESS_ROLES: broker
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - 9093:9093
+            - 10003:10003
+            - 10103:8091
+            - 10203:8090
+        volumes:
+            - $PWD/volumes/jmx_prometheus_javaagent-0.20.0.jar:/tmp/jmx_prometheus_javaagent-0.20.0.jar
+            - $PWD/volumes/kafka_config.yml:/tmp/kafka_config.yml
+
+    control-center:
+        image: confluentinc/cp-enterprise-control-center:7.6.0
+        hostname: control-center
+        container_name: control-center
+
+        depends_on:
+            kafka-1:
+                condition: service_healthy
+            kafka-2:
+                condition: service_healthy
+            kafka-3:
+                condition: service_healthy
+        environment:
+            CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka-1:19094,kafka-2:19095,kafka-3:19096
+            CONTROL_CENTER_SCHEMA_REGISTRY_URL: 
+            CONTROL_CENTER_REPLICATION_FACTOR: 3
+            CONTROL_CENTER_CONNECT_CONNECT_CLUSTER: 
+            CONTROL_CENTER_KSQL_KSQL_URL: 
+        ports:
+            - 9021:9021
+
